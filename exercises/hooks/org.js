@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Project = require('./project')
+const ProjectModel = require('./project')
 const cdnUrl = 'https://cdn.adminapp.com'
 
 const orgSchema = new mongoose.Schema({
@@ -21,6 +21,10 @@ const orgSchema = new mongoose.Schema({
       max: 4
     }
   }
+})
+
+orgSchema.post("remove", async function (doc, next) {
+  await ProjectModel.deleteMany({ org: doc._id })
 })
 
 module.exports = mongoose.model('org', orgSchema)
